@@ -17,14 +17,6 @@ public final class ZomZoneStatus extends JavaPlugin {
     private static Database database;
 
     @Override
-    public void onLoad() {
-        plugin = this;
-
-        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
-        database.setup();
-        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
-    }
-    @Override
     public void onEnable() {
         // Plugin startup logic
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
@@ -33,6 +25,7 @@ public final class ZomZoneStatus extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        database.shutdown();
     }
     public static ZomZoneStatus getPlugin()
     {
@@ -42,6 +35,13 @@ public final class ZomZoneStatus extends JavaPlugin {
     public static Database getDatabase()
     {
         return database;
+    }
+
+    public void setup(){
+        plugin = this;
+        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
+        database.setup();
+        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
     }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
