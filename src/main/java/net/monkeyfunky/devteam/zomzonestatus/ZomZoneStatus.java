@@ -26,6 +26,7 @@ public final class ZomZoneStatus extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
+        getLogger().info(">>>");
     }
 
     @Override
