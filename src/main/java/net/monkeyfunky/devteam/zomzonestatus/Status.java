@@ -19,6 +19,10 @@ public class Status {
         return status.get(statusType);
     }
 
+    public void addStatus(StatusTypes statusType, Integer addNumber) {
+        setStatus(statusType, status.get(statusType) + addNumber);
+    }
+
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
