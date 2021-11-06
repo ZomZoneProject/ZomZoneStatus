@@ -16,7 +16,8 @@ public final class ZomZoneStatus extends JavaPlugin {
     private static ZomZoneStatus plugin;
     private static Database database;
 
-    public ZomZoneStatus() {
+    @Override
+    public void onLoad() {
         plugin = this;
 
         database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
