@@ -16,6 +16,12 @@ public final class ZomZoneStatus extends JavaPlugin {
     private static ZomZoneStatus plugin;
     private static Database database;
 
+    public ZomZoneStatus() {
+        plugin = this;
+        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
+        database.setup();
+        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
+    }
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -37,12 +43,6 @@ public final class ZomZoneStatus extends JavaPlugin {
         return database;
     }
 
-    public void setup(){
-        plugin = this;
-        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
-        database.setup();
-        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
-    }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return false;
