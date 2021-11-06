@@ -14,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ZomZoneStatus extends JavaPlugin {
     private static ZomZoneStatus plugin;
-    private final Database database;
+    private static Database database;
 
     public ZomZoneStatus() {
         plugin = this;
@@ -38,7 +38,7 @@ public final class ZomZoneStatus extends JavaPlugin {
         return plugin;
     }
 
-    public Database getDatabase()
+    public static Database getDatabase()
     {
         return database;
     }

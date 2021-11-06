@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class StatusAPI implements API {
     @Override
     public Status getStatus(Player player) {
-        ResultSet rs = ZomZoneStatus.getPlugin().getDatabase().executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
+        ResultSet rs = ZomZoneStatus.getDatabase().executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
         try {
             rs.last();
             if (rs.getRow() == 0) return null;// まだステータスが存在しない。
