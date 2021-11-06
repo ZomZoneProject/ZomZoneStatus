@@ -12,21 +12,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public final class ZomZoneStatus extends JavaPlugin {
     private static ZomZoneStatus plugin;
     private static Database database;
 
-    public ZomZoneStatus() {
-        plugin = this;
-        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
-        database.setup();
-        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
+    public File getDatafolder() {
+        return getDataFolder();
     }
     @Override
     public void onEnable() {
         // Plugin startup logic
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
-        getLogger().info(">>>");
+        plugin = this;
+        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
+        database.setup();
+        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
     }
 
     @Override

@@ -1,8 +1,11 @@
 package net.monkeyfunky.devteam.zomzonestatus.db;
 
+import dev.m1n1don.simplesql.db.Database;
+import dev.m1n1don.simplesql.sqlite.SQLite;
 import net.monkeyfunky.devteam.zomzonestatus.Status;
 import net.monkeyfunky.devteam.zomzonestatus.StatusTypes;
 import net.monkeyfunky.devteam.zomzonestatus.ZomZoneStatus;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -11,7 +14,11 @@ import java.sql.SQLException;
 public class StatusAPI implements API {
     @Override
     public Status getStatus(Player player) {
-        ResultSet rs = ZomZoneStatus.getDatabase().executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
+        Database database;
+        database = new Database(ZomZoneStatus.getPlugin(), new SQLite("status.db", Bukkit.getPluginManager().getPlugin("ZomZoneStatus").getDataFolder().toString() + "/database/"));
+        database.setup();
+        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
+        ResultSet rs = database.executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
         try {
             rs.last();
             if (rs.getRow() == 0) return null;// まだステータスが存在しない。
@@ -30,17 +37,25 @@ public class StatusAPI implements API {
 
     @Override
     public void setStatus(Player player, Status status) {
+        Database database;
+        database = new Database(ZomZoneStatus.getPlugin(), new SQLite("status.db", Bukkit.getPluginManager().getPlugin("ZomZoneStatus").getDataFolder().toString() + "/database/"));
+        database.setup();
+        database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
         if (existsStatus(player)) {
-            ZomZoneStatus.getPlugin().getDatabase().executeStatement(SQLQuery.UPDATE_STATUS, status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
+            database.executeStatement(SQLQuery.UPDATE_STATUS, status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
                     status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH), player.getUniqueId().toString());
         } else {
-            ZomZoneStatus.getPlugin().getDatabase().executeStatement(SQLQuery.INSERT_STATUS, player.getUniqueId().toString(), status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
+            database.executeStatement(SQLQuery.INSERT_STATUS, player.getUniqueId().toString(), status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
                     status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH));
         }
     }
     public boolean existsStatus(Player player) {
         try {
-            ResultSet rs = ZomZoneStatus.getPlugin().getDatabase().executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
+            Database database;
+            database = new Database(ZomZoneStatus.getPlugin(), new SQLite("status.db", Bukkit.getPluginManager().getPlugin("ZomZoneStatus").getDataFolder().toString() + "/database/"));
+            database.setup();
+            database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
+            ResultSet rs = database.executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
             rs.last();
             int count = rs.getRow();
             rs.beforeFirst();
