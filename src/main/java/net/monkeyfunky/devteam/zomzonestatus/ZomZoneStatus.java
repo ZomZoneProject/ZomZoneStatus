@@ -14,12 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ZomZoneStatus extends JavaPlugin {
     private static ZomZoneStatus plugin;
-    private static Database database;
 
     public ZomZoneStatus() {
         plugin = this;
 
-        database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
+        Database database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
         database.setup();
         database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
     }
@@ -40,7 +39,7 @@ public final class ZomZoneStatus extends JavaPlugin {
 
     public static Database getDatabase()
     {
-        return database;
+        return new Database(plugin, new SQLite("status.db", getPlugin().getDataFolder() + "/database/"));
     }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
