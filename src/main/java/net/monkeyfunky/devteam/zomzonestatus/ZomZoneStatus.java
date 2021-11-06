@@ -14,17 +14,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ZomZoneStatus extends JavaPlugin {
     private static ZomZoneStatus plugin;
+    private final Database database;
 
-    private Database database;
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
+    public ZomZoneStatus() {
         plugin = this;
 
         database = new Database(this, new SQLite("status.db", getDataFolder() + "/database/"));
         database.setup();
         database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
-
+    }
+    @Override
+    public void onEnable() {
+        // Plugin startup logic
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
     }
 
