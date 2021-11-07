@@ -5,7 +5,8 @@ public enum StatusTypes {
     GUN("gun"),
     SWORD("sword"),
     SHIELD("shield"),
-    HEALTH("health");
+    HEALTH("health"),
+    POINT("point");
 
     private final String name;
 

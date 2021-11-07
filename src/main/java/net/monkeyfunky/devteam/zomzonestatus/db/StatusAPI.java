@@ -12,6 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StatusAPI implements API {
+    /**
+     *
+     * @param player
+     * @return Return the player's Status
+     */
     @Override
     public Status getStatus(Player player) {
         Database database;
@@ -21,7 +26,10 @@ public class StatusAPI implements API {
         ResultSet rs = database.executeResultStatement(SQLQuery.SELECT_STATUS, player.getUniqueId().toString());
         try {
             rs.last();
-            if (rs.getRow() == 0) return null;// まだステータスが存在しない。
+            if (rs.getRow() == 0) {
+                setStatus(player, new Status());
+                return getStatus(player);
+            }
             rs.first();
             Status status = new Status();
             for (StatusTypes statusType : StatusTypes.values()) {
@@ -31,10 +39,15 @@ public class StatusAPI implements API {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        assert false;
-        return null;
+        return new Status();
     }
 
+    /**
+     *
+     * Set the player status to Database(status.db).
+     * @param player
+     * @param status
+     */
     @Override
     public void setStatus(Player player, Status status) {
         Database database;
@@ -43,12 +56,18 @@ public class StatusAPI implements API {
         database.executeStatement(SQLQuery.CREATE_TABLE_STATUS);
         if (existsStatus(player)) {
             database.executeStatement(SQLQuery.UPDATE_STATUS, status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
-                    status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH), player.getUniqueId().toString());
+                    status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH), status.getStatus(StatusTypes.POINT), player.getUniqueId().toString());
         } else {
             database.executeStatement(SQLQuery.INSERT_STATUS, player.getUniqueId().toString(), status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
-                    status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH));
+                    status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH), status.getStatus(StatusTypes.POINT));
         }
     }
+
+    /**
+     *
+     * @param player
+     * @return Return is the player exits on Database.
+     */
     public boolean existsStatus(Player player) {
         try {
             Database database;

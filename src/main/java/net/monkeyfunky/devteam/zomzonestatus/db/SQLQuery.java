@@ -10,16 +10,17 @@ public enum SQLQuery implements IQuery {
                     "gun INTEGER," +
                     "sword INTEGER," +
                     "shield INTEGER," +
-                    "health INTEGER)"
+                    "health INTEGER, " +
+                    "point INTEGER)"
     ),
     INSERT_STATUS(
             "INSERT INTO Status " +
-                    "(uuid, bow, gun, sword, shield, health) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)"
+                    "(uuid, bow, gun, sword, shield, health, point) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)"
     ),
     UPDATE_STATUS(
             "UPDATE Status SET " +
-                    "bow = ?, gun = ?, sword = ?, shield = ?, health = ? WHERE uuid = ?"
+                    "bow = ?, gun = ?, sword = ?, shield = ?, health = ?, point = ? WHERE uuid = ?"
     ),
     SELECT_STATUS(
             "SELECT * FROM Status WHERE uuid = ?"
