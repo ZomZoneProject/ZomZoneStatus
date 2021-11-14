@@ -61,6 +61,7 @@ public class StatusAPI implements API {
             database.executeStatement(SQLQuery.INSERT_STATUS, player.getUniqueId().toString(), status.getStatus(StatusTypes.BOW), status.getStatus(StatusTypes.GUN), status.getStatus(StatusTypes.SWORD),
                     status.getStatus(StatusTypes.SHIELD), status.getStatus(StatusTypes.HEALTH), status.getStatus(StatusTypes.POINT));
         }
+        Bukkit.getPluginManager().callEvent(new StatusSetEvent(status, getStatus(player), player));
     }
 
     /**
